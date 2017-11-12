@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     @BindView(R.id.button_start) Button startButton;
 
 
+
     private SensorManager manager;
     private Sensor accel;
 
@@ -43,7 +45,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        level = new Level(1, "Square..", 1.5f, 5);
+        level = new Level(this, 1, "Square..", 1.5f, 5);
 
         gameView = new GameView(this, width, height);
         gameContainer.addView(gameView);
@@ -107,5 +109,10 @@ public class MainActivity extends Activity implements SensorEventListener {
             pauseGame();
         }
 
+    }
+
+    @OnClick(R.id.calculate_level)
+    public void calc(){
+        gameView.calcScore();
     }
 }

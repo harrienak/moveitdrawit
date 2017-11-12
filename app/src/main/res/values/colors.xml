@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="levelLineStroke">#CC475160</color>
+    <color name="levelLineFill">#CCeff5ff</color>
+    <color name="pathLine">#660327</color>
+    <color name="ballColor">#c62b40</color>
 </resources>

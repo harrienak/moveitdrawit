@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.seordmoret.app.moveitdrawit.MainActivity">
+    android:background="@drawable/bg"
+    tools:context="com.seordmoret.app.moveitdrawit.activity.MainActivity">
 
 
     <FrameLayout
@@ -23,6 +24,13 @@
             android:id="@+id/button_start"
             android:layout_width="wrap_content"
             android:text="Start"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/calculate_level"
+            android:layout_width="wrap_content"
+            android:text="calculate"
+            android:layout_gravity="right|end"
             android:layout_height="wrap_content" />
 
     </FrameLayout>

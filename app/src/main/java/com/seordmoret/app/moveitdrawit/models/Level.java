@@ -1,24 +1,32 @@
 package com.seordmoret.app.moveitdrawit.models;
 
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+
+import com.seordmoret.app.moveitdrawit.R;
+import com.seordmoret.app.moveitdrawit.Util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Level {
+    private Context context;
     private int nr;
     private String levelName;
     private float speed = 1f;//standard 1
     private int seconds = 5;//standard 5
 
     private List<PathPoints> pathPoints;
-    private Paint pathPaint = new Paint();
+    private Paint pathPaintStroke = new Paint();
+    private Paint pathPaintFill = new Paint();
     private Paint linePaint = new Paint();
 
-    public Level(int nr, String levelName, float speed, int seconds) {
+    public Level(Context context, int nr, String levelName, float speed, int seconds) {
+        this.context = context;
         this.nr = nr;
         this.levelName = levelName;
         this.speed = speed;
@@ -38,13 +46,33 @@ public class Level {
     }
 
     private void setStandardValues() {
-        linePaint.setColor(Color.BLUE);
+        linePaint.setColor(Utils.getColor(context, R.color.pathLine));
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(8f);
+        linePaint.setStrokeWidth(12);
+        linePaint.setDither(true);                    // set the dither to true
+        linePaint.setStyle(Paint.Style.STROKE);       // set to STOKE
+        linePaint.setStrokeJoin(Paint.Join.ROUND);    // set the join to round you want
+        linePaint.setStrokeCap(Paint.Cap.ROUND);      // set the paint cap to round too
+        linePaint.setPathEffect(new CornerPathEffect(10) );
 
-        pathPaint.setColor(Color.YELLOW);
-        pathPaint.setStyle(Paint.Style.STROKE);
-        pathPaint.setStrokeWidth(25f);
+        pathPaintStroke.setColor(Utils.getColor(context, R.color.levelLineStroke));
+        pathPaintStroke.setAntiAlias(true);
+        pathPaintStroke.setStrokeWidth(40);
+        pathPaintStroke.setDither(true);                    // set the dither to true
+        pathPaintStroke.setStyle(Paint.Style.STROKE);       // set to STOKE
+        pathPaintStroke.setStrokeJoin(Paint.Join.ROUND);    // set the join to round you want
+        pathPaintStroke.setStrokeCap(Paint.Cap.ROUND);      // set the paint cap to round too
+        pathPaintStroke.setPathEffect(new CornerPathEffect(10) );
+
+        pathPaintFill.setColor(Utils.getColor(context, R.color.levelLineFill));
+        pathPaintFill.setAntiAlias(true);
+        pathPaintFill.setStyle(Paint.Style.STROKE);
+        pathPaintFill.setStrokeWidth(18);
+        pathPaintFill.setDither(true);                    // set the dither to true
+        pathPaintFill.setStyle(Paint.Style.STROKE);       // set to STOKE
+        pathPaintFill.setStrokeJoin(Paint.Join.ROUND);    // set the join to round you want
+        pathPaintFill.setStrokeCap(Paint.Cap.ROUND);      // set the paint cap to round too
+        pathPaintFill.setPathEffect(new CornerPathEffect(10) );
     }
 
     public int getNr() {
@@ -67,11 +95,15 @@ public class Level {
         return pathPoints;
     }
 
-    public Paint getPathPaint() {
-        return pathPaint;
-    }
-
     public Paint getLinePaint() {
         return linePaint;
+    }
+
+    public Paint getPathPaintStroke() {
+        return pathPaintStroke;
+    }
+
+    public Paint getPathPaintFill() {
+        return pathPaintFill;
     }
 }
