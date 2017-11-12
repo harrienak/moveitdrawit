@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.seordmoret.app.moveitdrawit.R;
@@ -15,12 +16,14 @@ import com.seordmoret.app.moveitdrawit.views.GameView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends Activity implements SensorEventListener {
     @BindView(R.id.game_container)
     FrameLayout gameContainer;
     @BindView(R.id.non_game_container)
     FrameLayout nonGameContainer;
+    @BindView(R.id.button_start) Button startButton;
 
 
     private SensorManager manager;
@@ -30,6 +33,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Level level;
 
     private int width, height;
+    private boolean gameIsRunning = false;
 
 
     @Override
@@ -60,8 +64,10 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        gameView.move(event.values[0], event.values[1]);
-        gameView.invalidate();
+        if(gameIsRunning) {
+            gameView.move(event.values[0], event.values[1]);
+            gameView.invalidate();
+        }
     }
 
     @Override
@@ -79,6 +85,27 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
+        pauseGame();
         manager.unregisterListener(this);
+    }
+
+    private void pauseGame(){
+        gameIsRunning = false;
+        startButton.setText("ResumeGame");
+    }
+
+    private void restartGame(){
+        gameIsRunning = true;
+        startButton.setText("PauseGame");
+    }
+
+    @OnClick(R.id.button_start)
+    public void onStartPauseGame(){
+        if(!gameIsRunning){
+            restartGame();
+        } else{
+            pauseGame();
+        }
+
     }
 }
