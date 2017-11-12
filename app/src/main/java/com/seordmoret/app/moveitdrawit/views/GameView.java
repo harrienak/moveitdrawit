@@ -10,57 +10,27 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.view.View;
 
+import com.seordmoret.app.moveitdrawit.models.Level;
+import com.seordmoret.app.moveitdrawit.models.PathPoints;
+
 
 public class GameView extends View {
     private int diameter;
     private int x;
     private int y;
     private ShapeDrawable bubble;
-    private float speed = 1.55f;
     private int width;
     private int height;
-    Path p = new Path();
-    private Paint linePaint = new Paint();
 
-    private Path levelPath = new Path();
-    private Paint levelPaint = new Paint();
+    private Level level;
 
+    private Path userPath = new Path();
+    private Path levelPath;
 
     public GameView(Context context, int width, int height) {
         super(context);
         this.width = width;
         this.height = height;
-
-        setPaints();
-        setLevel();
-        createBubble();
-    }
-
-    private void setPaints(){
-        linePaint.setColor(Color.BLUE);
-        linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(8f);
-
-        levelPaint.setColor(Color.YELLOW);
-        levelPaint.setStyle(Paint.Style.STROKE);
-        levelPaint.setStrokeWidth(25f);
-    }
-
-    private void setLevel(){
-        levelPath = new Path();
-        //start position
-        levelPath.moveTo(width/4, height/4);
-
-        levelPath.lineTo((width/4)*3, (height/4));
-        levelPath.moveTo((width/4)*3, (height/4));
-
-        levelPath.lineTo((width/4)*3, (height/4)*3);
-        levelPath.moveTo((width/4)*3, (height/4)*3);
-
-        levelPath.lineTo((width/4), (height/4)*3);
-        levelPath.moveTo((width/4), (height/4)*3);
-
-        levelPath.lineTo(width/4, height/4);
     }
 
     private void createBubble() {
@@ -70,26 +40,26 @@ public class GameView extends View {
         bubble = new ShapeDrawable(new OvalShape());
         bubble.setBounds(x, y, x + diameter, y + diameter);
         bubble.getPaint().setColor(0xff00cccc);
-        p.moveTo(bubble.getBounds().centerX(), bubble.getBounds().centerY());
+        userPath.moveTo(bubble.getBounds().centerX(), bubble.getBounds().centerY());
     }
 
     private void addPointToLine(float x, float y) {
-        if (p != null) {
-            p.lineTo(x, y);
-            p.moveTo(x, y);
+        if (userPath != null) {
+            userPath.lineTo(x, y);
+            userPath.moveTo(x, y);
         }
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        canvas.drawPath(levelPath, level.getPathPaint());
+        canvas.drawPath(userPath, level.getLinePaint());
         bubble.draw(canvas);
-        canvas.drawPath(levelPath, levelPaint);
-        canvas.drawPath(p, linePaint);
     }
 
     public void move(float f, float g) {
-        x = (int) ((x + (-f * speed)));
-        y = (int) ((y + (g * speed)));
+        x = (int) ((x + (-f * level.getSpeed())));
+        y = (int) ((y + (g * level.getSpeed())));
 
         if (x < 0) {
             x = 0;
@@ -104,5 +74,19 @@ public class GameView extends View {
 
         bubble.setBounds(x, y, x + diameter, y + diameter);
         addPointToLine(bubble.getBounds().centerX(), bubble.getBounds().centerY());
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+        levelPath = new Path();
+        for (int i = 0; i < level.getPathPoints().size(); i++) {
+            PathPoints pathPoints = level.getPathPoints().get(i);
+            if (i != 0) {
+                levelPath.lineTo(width * pathPoints.getxPercentage(), height * pathPoints.getyPercentage());
+            }
+            levelPath.moveTo(width * pathPoints.getxPercentage(), height * pathPoints.getyPercentage());
+        }
+
+        createBubble();
     }
 }
