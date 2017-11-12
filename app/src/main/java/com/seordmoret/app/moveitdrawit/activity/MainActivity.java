@@ -1,19 +1,27 @@
-package com.seordmoret.app.moveitdrawit;
+package com.seordmoret.app.moveitdrawit.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
+import android.widget.FrameLayout;
+
+import com.seordmoret.app.moveitdrawit.R;
+import com.seordmoret.app.moveitdrawit.views.GameView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends Activity implements SensorEventListener {
-    private BubbleView bubbleView;
+    @BindView(R.id.game_container)
+    FrameLayout gameContainer;
+    @BindView(R.id.non_game_container)
+    FrameLayout nonGameContainer;
+
+    private GameView gameView;
     private SensorManager manager;
     private Sensor accel;
 
@@ -24,8 +32,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setScreenSizes();
-        bubbleView = new BubbleView(this, width, height);
-        setContentView(bubbleView);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        gameView = new GameView(this, width, height);
+        gameContainer.addView(gameView);
 
         manager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accel = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -42,8 +53,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        bubbleView.move(event.values[0], event.values[1]);
-        bubbleView.invalidate();
+        gameView.move(event.values[0], event.values[1]);
+        gameView.invalidate();
     }
 
     @Override

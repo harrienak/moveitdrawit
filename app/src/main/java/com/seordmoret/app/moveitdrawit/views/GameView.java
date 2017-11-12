@@ -1,4 +1,4 @@
-package com.seordmoret.app.moveitdrawit;
+package com.seordmoret.app.moveitdrawit.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,7 +11,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.view.View;
 
 
-public class BubbleView extends View {
+public class GameView extends View {
     private int diameter;
     private int x;
     private int y;
@@ -26,7 +26,7 @@ public class BubbleView extends View {
     private Paint levelPaint = new Paint();
 
 
-    public BubbleView(Context context, int width, int height) {
+    public GameView(Context context, int width, int height) {
         super(context);
         this.width = width;
         this.height = height;
@@ -87,7 +87,7 @@ public class BubbleView extends View {
         canvas.drawPath(p, linePaint);
     }
 
-    protected void move(float f, float g) {
+    public void move(float f, float g) {
         x = (int) ((x + (-f * speed)));
         y = (int) ((y + (g * speed)));
 
